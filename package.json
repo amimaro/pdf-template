@@ -13,7 +13,9 @@
   "repository": "amimaro/pdf-template",
   "keywords": [],
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "pdfjs-dist": "^2.0.489"
+  },
   "devDependencies": {
     "ava": "*"
   }
