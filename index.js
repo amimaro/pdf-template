@@ -9,10 +9,9 @@ const pdfjsLib = require('pdfjs-dist')
 module.exports = async function pdfTemplate(params) {
   require(getModulePath() + '/vendor/pdfjs/domstubs.js').setStubs(global)
   let data = await readPDF(params.template)
-  let pages = await loadDocument(data)
-
-  console.log(pages.pdfInfo)
-
+  let doc = await loadDocument(data)
+  let pages = await loadPages(doc)
+  
   return params
 }
 
@@ -29,4 +28,16 @@ let loadDocument = async function(data) {
     data: data,
     nativeImageDecoderSupport: pdfjsLib.NativeImageDecoding.DISPLAY
   })
+}
+
+let loadPages = async function(doc) {
+  let result = []
+  for (let i = 1; i <= doc.pdfInfo.numPages; i++) {
+    result.push(await loadPage(doc, i))
+  }
+  return result
+}
+
+let loadPage = async function(doc, pageNum) {
+  return doc.getPage(pageNum)
 }
