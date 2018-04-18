@@ -1,7 +1,8 @@
 'use strict'
 
-module.exports = function pdfTemplate (options) {
-  options = options || {}
+const ejs = require('ejs')
+const fs = require('fs')
 
-  return true
+module.exports = async function pdfTemplate(params) {
+  return params
 }
