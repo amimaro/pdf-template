@@ -11,7 +11,12 @@ module.exports = async function pdfTemplate(params) {
   let data = await readPDF(params.template)
   let doc = await loadDocument(data)
   let pages = await loadPages(doc)
-  
+
+  for (let page of pages) {
+    let svg = await getSVG(page)
+    getDOM(svg)
+  }
+
   return params
 }
 
@@ -40,4 +45,19 @@ let loadPages = async function(doc) {
 
 let loadPage = async function(doc, pageNum) {
   return doc.getPage(pageNum)
+}
+
+let getOperators = async function(page) {
+  return page.getOperatorList()
+}
+
+let getSVG = async function(page) {
+  let operator = await getOperators(page)
+  let viewport = page.getViewport(1.0 /* scale */ )
+  let svgGfx = new pdfjsLib.SVGGraphics(page.commonObjs, page.objs)
+  svgGfx.embedFonts = true
+  return svgGfx.getSVG(operator, viewport)
+}
+
+
 }
