@@ -14,7 +14,7 @@ module.exports = async function pdfTemplate(params) {
 
   for (let page of pages) {
     let svg = await getSVG(page)
-    getDOM(svg)
+    getElements(svg)
   }
 
   return params
@@ -59,5 +59,6 @@ let getSVG = async function(page) {
   return svgGfx.getSVG(operator, viewport)
 }
 
-
+let getElements = async function(svg) {
+  return svg.getElementsByTagName("*")
 }
