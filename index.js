@@ -8,8 +8,11 @@ const pdfjsLib = require('pdfjs-dist')
 
 module.exports = async function pdfTemplate(params) {
   require(getModulePath() + '/vendor/pdfjs/domstubs.js').setStubs(global)
-  let data = readPDF(params.template)
-  
+  let data = await readPDF(params.template)
+  let pages = await loadDocument(data)
+
+  console.log(pages.pdfInfo)
+
   return params
 }
 
@@ -19,4 +22,11 @@ let getModulePath = function() {
 
 let readPDF = async function(path) {
   return new Uint8Array(fs.readFileSync(path))
+}
+
+let loadDocument = async function(data) {
+  return pdfjsLib.getDocument({
+    data: data,
+    nativeImageDecoderSupport: pdfjsLib.NativeImageDecoding.DISPLAY
+  })
 }
