@@ -8,25 +8,28 @@ const stream = require('stream')
 const pdfjsLib = require('pdfjs-dist')
 
 module.exports = async function pdfTemplate(params) {
-  require(getModulePath() + '/vendor/pdfjs/domstubs.js').setStubs(global)
+  try {
+    require(getModulePath() + '/vendor/pdfjs/domstubs.js').setStubs(global)
 
-  let data = await readPDF(params.template)
-  let doc = await loadDocument(data)
-  let pages = await loadPages(doc)
-  let result = []
-  let i = 1
-  for (let page of pages) {
-    let svg = await getSVG(page)
-    let elements = renderElements(svg, params.data)
-    result.push(elements)
-    i++
+    let data = await readPDF(params.template)
+    let doc = await loadDocument(data)
+    let pages = await loadPages(doc)
+    let result = []
+    let i = 1
+    for (let page of pages) {
+      let svg = await getSVG(page)
+      let elements = renderElements(svg, params.data)
+      result.push(elements)
+      i++
+    }
+
+    writeSvgToFile(result[0], 'svg1.svg')
+  } catch (err) {
+    console.error(`An error occured: ${err}`)
+    return false
   }
 
-  writeSvgToFile(result[0], 'svg1.svg')
-
-  // console.log(result[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent)
-
-  return result.length
+  return true
 }
 
 function ReadableSVGStream(options) {
@@ -67,7 +70,7 @@ function writeSvgToFile(svgElement, filePath) {
 }
 
 let getModulePath = function() {
-  return process.cwd() + '/node_modules/pdf-template'
+  return process.cwd() == __dirname ? process.cwd() : process.cwd() + '/node_modules/pdf-template'
 }
 
 let readPDF = async function(path) {
@@ -107,10 +110,10 @@ let getSVG = async function(page) {
 
 let renderElements = function(nodeList, data) {
   for (let node of nodeList.childNodes) {
-    if(node.childNodes.length > 0){
+    if (node.childNodes.length > 0) {
       renderElements(node, data) // List childNodes recursively
     }
-    if(node.textContent.length > 0){
+    if (node.textContent.length > 0) {
       node.textContent = render(node.textContent, data)
     }
   }
