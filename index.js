@@ -1,7 +1,6 @@
 'use strict'
 
 const fs = require('fs')
-const ejs = require('ejs')
 const mustache = require('mustache')
 const path = require('path')
 const util = require('util')
