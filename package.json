@@ -1,6 +1,6 @@
 {
   "name": "pdf-template",
-  "description": "PDF templating with EJS and PDF.js",
+  "description": "PDF templating with Mustache and PDF.js",
   "author": "amimaro",
   "version": "0.1.0",
   "main": "index.js",
