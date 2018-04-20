@@ -14,7 +14,7 @@ module.exports = async function pdfTemplate(params) {
     let data = await readPDF(params.template)
     let doc = await loadDocument(data)
     let pages = await loadPages(doc, params.data)
-    let html = getSerializedPages(pages)
+    let html = editTags(getSerializedPages(pages))
     
     return pages.length
   } catch (err) {
@@ -23,6 +23,10 @@ module.exports = async function pdfTemplate(params) {
   }
 
   return true
+}
+
+let editTags = function(html) {
+  return html.replace(/svg:/g, '')
 }
 
 let getSerializedPages = function(pages) {
