@@ -20,7 +20,9 @@
   "license": "MIT",
   "dependencies": {
     "mustache": "^2.3.0",
-    "pdfjs-dist": "^2.0.489"
+    "pdfjs-dist": "^2.0.489",
+    "pdfkit": "^0.8.3",
+    "svg-to-pdfkit": "^0.1.7"
   },
   "devDependencies": {
     "ava": "*"
