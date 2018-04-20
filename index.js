@@ -6,23 +6,36 @@ const path = require('path')
 const util = require('util')
 const stream = require('stream')
 const pdfjsLib = require('pdfjs-dist')
+const PDFDocument = require('pdfkit')
+const SVGtoPDF = require('svg-to-pdfkit')
 
 module.exports = async function pdfTemplate(params) {
   try {
     require(getModulePath() + '/vendor/pdfjs/domstubs.js').setStubs(global)
-
     let data = await readPDF(params.template)
     let doc = await loadDocument(data)
     let pages = await loadPages(doc, params.data)
     let html = editTags(getSerializedPages(pages))
-    
-    return pages.length
+    writePDF(html, params.output)
   } catch (err) {
-    console.error(`An error occured: ${err}`)
-    return false
+    throw err
   }
+}
 
-  return true
+let writePDF = async function(data, path) {
+  const pdfStream = fs.createWriteStream(path)
+  return new Promise(function(resolve, reject) {
+    const pdfDoc = new PDFDocument()
+    SVGtoPDF(pdfDoc, data, 0, 0)
+    pdfDoc.once('error', reject)
+    pdfStream.once('error', reject)
+    pdfStream.once('finish', resolve)
+    pdfDoc.pipe(pdfStream)
+    pdfDoc.end()
+  }).catch(function(err) {
+    pdfStream.end()
+    throw err
+  })
 }
 
 let editTags = function(html) {
@@ -31,7 +44,7 @@ let editTags = function(html) {
 
 let getSerializedPages = function(pages) {
   let result = ''
-  for(let page of pages) {
+  for (let page of pages) {
     result += serialize(page)
   }
   return result
