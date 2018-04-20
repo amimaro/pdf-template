@@ -22,8 +22,8 @@ module.exports = async function pdfTemplate(params) {
       result.push(elements)
       i++
     }
-
-    writeSvgToFile(result[0], 'svg1.svg')
+    
+    console.log(serialize(result[0]))
   } catch (err) {
     console.error(`An error occured: ${err}`)
     return false
@@ -32,41 +32,14 @@ module.exports = async function pdfTemplate(params) {
   return true
 }
 
-function ReadableSVGStream(options) {
-  if (!(this instanceof ReadableSVGStream)) {
-    return new ReadableSVGStream(options)
+let serialize = function(nodeList) {
+  let serialized = ''
+  let chunk = ''
+  let serializer = nodeList.getSerializer()
+  while((chunk = serializer.getNext()) !== null) {
+    serialized += chunk
   }
-  stream.Readable.call(this, options)
-  this.serializer = options.svgElement.getSerializer()
-}
-
-util.inherits(ReadableSVGStream, stream.Readable)
-// Implements https://nodejs.org/api/stream.html#stream_readable_read_size_1
-ReadableSVGStream.prototype._read = function() {
-  var chunk
-  while ((chunk = this.serializer.getNext()) !== null) {
-    if (!this.push(chunk)) {
-      return
-    }
-  }
-  this.push(null)
-}
-
-function writeSvgToFile(svgElement, filePath) {
-  var readableSvgStream = new ReadableSVGStream({
-    svgElement: svgElement,
-  });
-  var writableStream = fs.createWriteStream(filePath);
-  return new Promise(function(resolve, reject) {
-    readableSvgStream.once('error', reject);
-    writableStream.once('error', reject);
-    writableStream.once('finish', resolve);
-    readableSvgStream.pipe(writableStream);
-  }).catch(function(err) {
-    readableSvgStream = null; // Explicitly null because of v8 bug 6512.
-    writableStream.end();
-    throw err;
-  });
+  return serialized
 }
 
 let getModulePath = function() {
