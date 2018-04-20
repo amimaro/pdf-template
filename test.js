@@ -14,7 +14,9 @@ test('pdf-template example', t => {
       projects: ['project1', 'project2', 'project3']
     }
   }).then((res) => {
-    t.true(res)
+    t.pass()
+  }).catch((err) => {
+    t.fail()
   })
 })
 
@@ -31,6 +33,8 @@ test('pdf-template fail example', t => {
       projects: ['project1', 'project2', 'project3']
     }
   }).then((res) => {
-    t.false(res)
+    t.fail()
+  }).catch((err) => {
+    t.pass()
   })
 })
