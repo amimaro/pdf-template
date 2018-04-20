@@ -51,13 +51,14 @@ let getSerializedPages = function(pages) {
 }
 
 let serialize = function(nodeList) {
-  let serialized = ''
-  let chunk = ''
-  let serializer = nodeList.getSerializer()
-  while ((chunk = serializer.getNext()) !== null) {
-    serialized += chunk
-  }
-  return serialized
+  // let serialized = ''
+  // let chunk = ''
+  // let serializer = nodeList.getSerializer()
+  // while ((chunk = serializer.getNext()) !== null) {
+  //   serialized += chunk
+  // }
+  // return serialized
+  return nodeList + ''
 }
 
 let getModulePath = function() {
