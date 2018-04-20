@@ -15,15 +15,12 @@ module.exports = async function pdfTemplate(params) {
     let doc = await loadDocument(data)
     let pages = await loadPages(doc)
     let result = []
-    let i = 1
     for (let page of pages) {
-      let svg = await getSVG(page)
-      let elements = renderElements(svg, params.data)
+      let nodeList = await getSVGNodeList(page)
+      let elements = renderElements(nodeList, params.data)
       result.push(elements)
-      i++
     }
-    
-    console.log(serialize(result[0]))
+
   } catch (err) {
     console.error(`An error occured: ${err}`)
     return false
@@ -36,7 +33,7 @@ let serialize = function(nodeList) {
   let serialized = ''
   let chunk = ''
   let serializer = nodeList.getSerializer()
-  while((chunk = serializer.getNext()) !== null) {
+  while ((chunk = serializer.getNext()) !== null) {
     serialized += chunk
   }
   return serialized
@@ -73,7 +70,7 @@ let getOperators = async function(page) {
   return page.getOperatorList()
 }
 
-let getSVG = async function(page) {
+let getSVGNodeList = async function(page) {
   let operators = await getOperators(page)
   let viewport = page.getViewport(1.0 /* scale */ )
   let svgGfx = new pdfjsLib.SVGGraphics(page.commonObjs, page.objs)
