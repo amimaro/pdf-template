@@ -4,8 +4,8 @@ import pdfTemplate from './'
 test('pdf-template example', t => {
   t.plan(1)
   return pdfTemplate({
-    template: './example.pdf',
-    output: './output.pdf',
+    template: 'example.pdf',
+    output: 'output.pdf',
     data: {
       name: 'John Doe',
       age: 26,
@@ -23,8 +23,8 @@ test('pdf-template example', t => {
 test('pdf-template fail example', t => {
   t.plan(1)
   return pdfTemplate({
-    template: './exampleFail.pdf',
-    output: './output.pdf',
+    template: 'exampleFail.pdf',
+    output: 'output.pdf',
     data: {
       name: 'John Doe',
       age: 26,
