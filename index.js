@@ -13,14 +13,9 @@ module.exports = async function pdfTemplate(params) {
 
     let data = await readPDF(params.template)
     let doc = await loadDocument(data)
-    let pages = await loadPages(doc)
-    let result = []
-    for (let page of pages) {
-      let nodeList = await getSVGNodeList(page)
-      let elements = renderElements(nodeList, params.data)
-      result.push(elements)
-    }
-
+    let pages = await loadPages(doc, params.data)
+    
+    return pages.length
   } catch (err) {
     console.error(`An error occured: ${err}`)
     return false
@@ -54,10 +49,13 @@ let loadDocument = async function(data) {
   })
 }
 
-let loadPages = async function(doc) {
+let loadPages = async function(doc, data) {
   let result = []
   for (let i = 1; i <= doc.pdfInfo.numPages; i++) {
-    result.push(await loadPage(doc, i))
+    let page = await loadPage(doc, i)
+    let nodeList = await getSVGNodeList(page)
+    let elements = renderElements(nodeList, data)
+    result.push(elements)
   }
   return result
 }
