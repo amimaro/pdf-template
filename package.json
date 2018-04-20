@@ -2,7 +2,7 @@
   "name": "pdf-template",
   "description": "PDF templating with Mustache and PDF.js",
   "author": "amimaro",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "index.js",
   "files": [
     "index.js"
@@ -11,7 +11,12 @@
     "test": "ava"
   },
   "repository": "amimaro/pdf-template",
-  "keywords": ["pdf","template","mustache","file"],
+  "keywords": [
+    "pdf",
+    "template",
+    "mustache",
+    "file"
+  ],
   "license": "MIT",
   "dependencies": {
     "mustache": "^2.3.0",
