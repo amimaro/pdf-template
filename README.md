@@ -1,6 +1,6 @@
 # pdf-template [![Build Status](https://secure.travis-ci.org/amimaro/pdf-template.svg?branch=master)](https://travis-ci.org/amimaro/pdf-template) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-PDF templating with mustache.js and PDF.js
+PDF templating with mustache.js
 
 ## Installation
 
@@ -25,7 +25,10 @@ pdfTemplate({
   }
 }).then((res) => {
   console.log(res)
+}).catch((err) => {
+  console.error(err)
 })
+
 ```
 
 ## Testing
