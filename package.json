@@ -11,7 +11,7 @@
     "test": "ava"
   },
   "repository": "amimaro/pdf-template",
-  "keywords": [],
+  "keywords": ["pdf","template","mustache","file"],
   "license": "MIT",
   "dependencies": {
     "mustache": "^2.3.0",
