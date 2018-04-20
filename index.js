@@ -14,6 +14,7 @@ module.exports = async function pdfTemplate(params) {
     let data = await readPDF(params.template)
     let doc = await loadDocument(data)
     let pages = await loadPages(doc, params.data)
+    let html = getSerializedPages(pages)
     
     return pages.length
   } catch (err) {
@@ -22,6 +23,14 @@ module.exports = async function pdfTemplate(params) {
   }
 
   return true
+}
+
+let getSerializedPages = function(pages) {
+  let result = ''
+  for(let page of pages) {
+    result += serialize(page)
+  }
+  return result
 }
 
 let serialize = function(nodeList) {
