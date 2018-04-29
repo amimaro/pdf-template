@@ -15,9 +15,9 @@ module.exports = async function pdfTemplate(params) {
     let data = await readPDF(params.template)
     let doc = await loadDocument(data)
     let pages = await loadPages(doc, params.data)
-    let html = editTags(getSerializedPages(pages))
-    writePDF(html, params.output)
-    return html
+    let htmls = getSerializedPages(pages)
+    writePDF(htmls.join(''), params.output)
+    return htmls
   } catch (err) {
     throw err
   }
@@ -44,9 +44,9 @@ let editTags = function(html) {
 }
 
 let getSerializedPages = function(pages) {
-  let result = ''
+  let result = []
   for (let page of pages) {
-    result += serialize(page)
+    result.push(editTags(serialize(page)))
   }
   return result
 }
