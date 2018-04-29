@@ -16,7 +16,8 @@ module.exports = async function pdfTemplate(params) {
     let doc = await loadDocument(data)
     let pages = await loadPages(doc, params.data)
     let htmls = getSerializedPages(pages)
-    writePDF(htmls.join(''), params.output)
+    if (params.output !== '')
+      writePDF(htmls.join(''), params.output)
     return htmls
   } catch (err) {
     throw err
