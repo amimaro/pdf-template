@@ -24,51 +24,9 @@ module.exports = async function pdfTemplate(params) {
   }
 }
 
-let writePDF = async function(data, path) {
-  const pdfStream = fs.createWriteStream(path)
-  return new Promise(function(resolve, reject) {
-    const pdfDoc = new PDFDocument()
-    SVGtoPDF(pdfDoc, data, 0, 0)
-    pdfDoc.once('error', reject)
-    pdfStream.once('error', reject)
-    pdfStream.once('finish', resolve)
-    pdfDoc.pipe(pdfStream)
-    pdfDoc.end()
-  }).catch(function(err) {
-    pdfStream.end()
-    throw err
-  })
-}
-
-let editTags = function(html) {
-  return html.replace(/svg:/g, '')
-}
-
-let getSerializedPages = function(pages) {
-  let result = []
-  for (let page of pages) {
-    result.push(editTags(serialize(page)))
-  }
-  return result
-}
-
-let serialize = function(nodeList) {
-  // let serialized = ''
-  // let chunk = ''
-  // let serializer = nodeList.getSerializer()
-  // while ((chunk = serializer.getNext()) !== null) {
-  //   serialized += chunk
-  // }
-  // return serialized
-  return nodeList + ''
-}
-
-let getModulePath = function() {
-  return process.cwd() == __dirname ? process.cwd() : process.cwd() + '/node_modules/pdf-template'
-}
-
-let readPDF = async function(path) {
-  return new Uint8Array(fs.readFileSync(path))
+let readPDF = async function(file) {
+  if(typeof file === 'string')
+    return new Uint8Array(fs.readFileSync(file))
 }
 
 let loadDocument = async function(data) {
@@ -91,6 +49,49 @@ let loadPages = async function(doc, data) {
 
 let loadPage = async function(doc, pageNum) {
   return doc.getPage(pageNum)
+}
+
+let getSerializedPages = function(pages) {
+  let result = []
+  for (let page of pages) {
+    result.push(editTags(serialize(page)))
+  }
+  return result
+}
+
+let editTags = function(html) {
+  return html.replace(/svg:/g, '')
+}
+
+let serialize = function(nodeList) {
+  // let serialized = ''
+  // let chunk = ''
+  // let serializer = nodeList.getSerializer()
+  // while ((chunk = serializer.getNext()) !== null) {
+  //   serialized += chunk
+  // }
+  // return serialized
+  return nodeList + ''
+}
+
+let writePDF = async function(data, path) {
+  const pdfStream = fs.createWriteStream(path)
+  return new Promise(function(resolve, reject) {
+    const pdfDoc = new PDFDocument()
+    SVGtoPDF(pdfDoc, data, 0, 0)
+    pdfDoc.once('error', reject)
+    pdfStream.once('error', reject)
+    pdfStream.once('finish', resolve)
+    pdfDoc.pipe(pdfStream)
+    pdfDoc.end()
+  }).catch(function(err) {
+    pdfStream.end()
+    throw err
+  })
+}
+
+let getModulePath = function() {
+  return process.cwd() == __dirname ? process.cwd() : process.cwd() + '/node_modules/pdf-template'
 }
 
 let getOperators = async function(page) {
