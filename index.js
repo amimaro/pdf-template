@@ -71,6 +71,10 @@ let serialize = function(nodeList) {
   return nodeList + ''
 }
 
+let editTags = function(html) {
+  return html.replace(/svg:/g, '')
+}
+
 let writePDF = async function(data, path) {
   const pdfStream = fs.createWriteStream(path)
   return new Promise(function(resolve, reject) {
