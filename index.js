@@ -27,6 +27,7 @@ module.exports = async function pdfTemplate(params) {
 let readPDF = async function(file) {
   if(typeof file === 'string')
     return new Uint8Array(fs.readFileSync(file))
+  return file
 }
 
 let loadDocument = async function(data) {
@@ -57,10 +58,6 @@ let getSerializedPages = function(pages) {
     result.push(editTags(serialize(page)))
   }
   return result
-}
-
-let editTags = function(html) {
-  return html.replace(/svg:/g, '')
 }
 
 let serialize = function(nodeList) {
