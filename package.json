@@ -2,7 +2,7 @@
   "name": "pdf-template",
   "description": "PDF templating with Mustache and PDF.js",
   "author": "amimaro",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "main": "index.js",
   "files": [
     "index.js",
